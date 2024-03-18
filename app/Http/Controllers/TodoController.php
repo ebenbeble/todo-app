@@ -6,17 +6,16 @@ use App\Models\Todo;
 use Illuminate\Http\Request;
 use App\Http\Requests\TodoRequest;
 use Illuminate\Support\Facades\Session;
+use App\DataTables\TodoDataTable;
 
 class TodoController extends Controller
 {
-    
-    public function index() 
+
+    public function index(TodoDataTable $dataTable)
     {
-        
-        
-        return view('todos.index', [
-            'todos' =>  Todo::latest()->filter(request(['priority', 'is_completed']))->get()
-        ]);
+
+        return $dataTable->render('todos.todoview');
+
 
     }
 
@@ -42,8 +41,8 @@ class TodoController extends Controller
 
     public function store(TodoRequest $request)
     {
-        //$request->validated();  
-        //dd($request->priority);
+        //$request->validated();
+        //dd($request);
         Todo::create([
             'title' => $request-> title,
             'description' => $request-> description,
@@ -55,12 +54,12 @@ class TodoController extends Controller
 
         $request->session()->flash('alert-success', 'Todo Created Successfully');
 
-        return to_route('todos.index');
+        return to_route('todos.view');
     }
 
     public function show($id)
     {
-       
+
        $todo = Todo::find($id);
        if ($todo)
        {
@@ -78,7 +77,7 @@ class TodoController extends Controller
     }
     public function update (TodoRequest $request)
     {
-        $todo = Todo::find($request->todo_id);
+        $todo = Todo::find($request->id);
         if (!$todo || Session::has('error'))
         {
             request()->session()->flash('error', 'Unable to Update');
@@ -86,11 +85,11 @@ class TodoController extends Controller
                 'error'=> 'Unable to Update'
             ]);
         }
-        
+
         $todo->update([
             'title'=>$request->title,
             'description'=>$request->description,
-            'is_completed'=>$request->is_completed,
+            'is_completed'=>$request->is_completed ?? 'Pending',
             'due_date'=>$request->due_date,
             'priority'=>$request->priority
 
@@ -98,12 +97,12 @@ class TodoController extends Controller
 
         $request->session()->flash('alert-info', 'Todo Updated Successfully');
 
-        return to_route('todos.index');
+        return to_route('todos.view');
     }
 
     public function destroy(Request $request)
     {
-        $todo = Todo::find($request->todo_id);
+        $todo = Todo::find($request->id);
         if (!$todo)
         {
             request()->session()->flash('error', 'Unable to Delete');
@@ -114,6 +113,6 @@ class TodoController extends Controller
         $todo->delete();
         $request->session()->flash('alert-info', 'Todo Deleted Successfully');
 
-        return to_route('todos.index');
+        return to_route('todos.view');
     }
 }

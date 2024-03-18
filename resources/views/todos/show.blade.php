@@ -25,14 +25,14 @@
                             <a href="{{ route('todos.edit', $todo->id)}}" class="inner btn btn-info btn-sm py-1 px-3">Edit</a>
                         </div>
                         <div class="col-md-1">
-                            <form method="POST" action="{{ route('todos.destroy')}}" class="inner">
+                            <form method="POST" action="{{ route('todos.destroy', $todo->id)}}" class="inner">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="todo_id" value="{{ $todo->id }}">
                                 <input type="submit" class="btn btn-danger btn-sm" value="Delete">
                             </form>
                         </div>
-                                
+
                     </div>
                 </div>
             </div>

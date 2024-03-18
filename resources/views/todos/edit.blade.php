@@ -21,15 +21,15 @@
                     <form method="POST" action="{{ route('todos.update')}}">
                         @csrf
                         @method( 'PUT')
-                        <input type="hidden" name="todo_id" value="{{ $todo->id}}"id="">
-                        <div class="mb-3"> 
+                        <input type="hidden" name="id" value="{{ $todo->id}}"id="">
+                        <div class="mb-3">
                           <label  class="form-label">Title</label>
                           <input type="text" name="title" class="form-control" value="{{ $todo->title }}">
-    
+
                         </div>
                         <div class="mb-3">
                           <label for="description" class="form-label">Description</label>
-                          <textarea name="description" class="form-control" id="description" cols="5" rows="5">
+                          <textarea name="description" class="form-control" id="description" rows="5">
                             {{ $todo->description}}
                           </textarea>
                         </div>
@@ -53,7 +53,7 @@
                                 <option value="Pending">Pending</option>
                             </select>
                           </div>
-                        
+
                         <button type="submit" class="btn btn-primary">Update</button>
                       </form>
                 </div>
